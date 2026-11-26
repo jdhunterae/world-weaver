@@ -1,0 +1,23 @@
+# Build output
+/bin/
+/dist/
+/world-weaver
+*.exe
+*.test
+*.out
+
+# Test coverage
+coverage.out
+coverage.html
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Local editor settings
+.idea/
+.vscode/
+
+# Temporary files
+*.tmp
+*.swp
