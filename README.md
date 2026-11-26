@@ -1,42 +1,41 @@
 # World Weaver
 
-A procedurally generated fantasy world and autonomous civilization simulator written in Go.
+A procedurally generated fantasy ecosystem and society simulator written in Go.
 
 ## Overview
 
-World Weaver explores how geography, resources, settlements, factions, and individuals can interact to create a living fantasy world with its own history. Inspired by tabletop role-playing games and emergent simulation games, the project aims to generate worlds whose stories arise from simulation rules rather than predetermined scripts.
+World Weaver explores how geography, renewable resources, prey populations, predator packs and human tribes interact to produce emergent history. Generate a seeded world, advance its clock and observe how its inhabitants survive, compete, cooperate, migrate and change over time.
 
-The initial interface will be terminal-based. Users will be able to generate a world, advance time, and eventually inspect its inhabitants, settlements, and history.
+The observer does not direct individual inhabitants. Stories arise from the consequences of simulation rules, not scripted events or predetermined winners.
 
 ## Project goals
 
-- Generate reproducible worlds from seeds.
-- Create coherent terrain, climates, biomes, and settlements.
-- Simulate resources, population, trade, and political relationships.
-- Allow autonomous agents to make decisions and affect the world.
-- Record meaningful events and their consequences as world history.
-- Learn idiomatic Go, algorithm design, testing, and software architecture through incremental development.
-
-## Status
-
-**Early development / planning.** The features described above are goals, not implemented functionality. Build and usage instructions will be added once a runnable prototype exists.
+- Generate reproducible worlds with coherent terrain and renewable vegetation.
+- Model food chains, resource scarcity and population survival.
+- Give autonomous collectives homes, dynamic ranges of influence and group activities.
+- Model leadership, population dissatisfaction, confidence, cooperation and political change.
+- Allow incidental conflict, alliances, migration and fragmentation to emerge naturally.
+- Record meaningful events in an inspectable historical chronicle.
+- Learn idiomatic Go, algorithms, testing and incremental software architecture.
 
 ## Design principles
 
-- Simulation rules are independent of the user interface.
-- Prefer reproducible, testable behavior and simple models before complexity.
-- Stories emerge from interactions between systems.
-- Add abstractions and concurrency only when they solve a demonstrated problem.
+- Influence is not ownership; overlap is not hostility.
+- Leadership is not absolute control; intentions are not guaranteed outcomes.
+- Dissatisfaction is not necessarily overthrow; expansion is not necessarily prosperity.
+- Conflict does not require intent; history is an outcome, not a scripted event.
+- Simulate consequences before details. Share mechanisms without forcing every species to behave alike.
+- Keep simulation independent of presentation, deterministic when seeded, and independently testable.
+
+## Status and scope
+
+**Planning / early development.** These are design goals, not implemented features. The first MVP is a terminal-observable ecosystem with vegetation, prey and multiple food-seeking tribes. Governance, autonomous predator packs and fragmentation follow in staged releases. No individual NPC simulation, magic, detailed economy or graphical UI is required for the MVP.
 
 ## Documentation
 
 - [Design document](docs/DESIGN.md)
 - [Development roadmap](docs/ROADMAP.md)
 
-## Technology
+## Technology and license
 
-Go, initially using the standard library. Terminal UI libraries and persistence technologies will be evaluated as the project develops.
-
-## License
-
-A license has not yet been selected. Public repository visibility does not itself grant permission to reuse or redistribute the code.
+Go, initially using the standard library. Build and usage instructions will be added once a runnable prototype exists. A license has not yet been selected; public visibility alone does not grant reuse rights.

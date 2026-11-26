@@ -1,104 +1,146 @@
 # World Weaver — Development Roadmap
 
-Milestones are learning checkpoints, not calendar deadlines. All are initially planned; verify existing repository work before marking any complete.
+Revised baseline. Milestones are learning checkpoints, not calendar deadlines. All are planned until verified against the repository. Each milestone should leave a runnable or independently testable result.
 
-| Milestone | Deliverable | Learning focus |
+## Release gates
+
+| Gate | Milestones | Demonstrable result |
 |---|---|---|
-| M0 | Project foundation | Go modules, Git, tests |
-| M1 | Static world | Types, slices, methods |
-| M2 | Seeded terrain | Random sources, reproducibility |
-| M3 | Coherent geography | Noise, spatial algorithms |
-| M4 | Settlements | Scoring, constraints, data modeling |
-| M5 | Simulation clock | State transitions, testing |
-| M6 | Resource economy and chronicle | Modeling, invariants, events |
-| M7 | Trade and roads | Graphs, pathfinding |
-| M8 | Population and factions | Relationships, decision rules |
-| M9 | Autonomous inhabitants | Agent behavior, state machines |
-| M10 | Observer and persistence | UI, serialization |
-| M11 | Scale and polish | Profiling, concurrency, releases |
+| Foundation | M0–M2 | Seeded terminal map |
+| Survival MVP | M3–M6 | Renewable ecosystem and competing food-seeking tribes |
+| Governance and interaction | M7–M10 | Adaptive ranges, encounters, leadership and political change |
+| Living collectives | M11–M12 | Fragmentation and autonomous predator packs |
+| Observer and experiments | M13–M14 | Inspectable history, repeatable comparative runs |
 
 ## M0 — Project foundation
 
-- [ ] Review README, design and roadmap.
-- [ ] Initialize Go module using the actual repository import path.
-- [ ] Create a minimal executable and verify it runs.
-- [ ] Verify `go test ./...` succeeds; add a basic test when meaningful.
-- [ ] Establish feature branches and pull requests; optionally add CI.
+- [ ] Review and commit revised README, design and roadmap.
+- [ ] Initialize Go module using actual repository import path; create minimal executable.
+- [ ] Verify `go run ./cmd/world-weaver` and `go test ./...`; add CI when useful.
+- [ ] Establish focused issues, branches and self-reviewed pull requests.
 
-Done when a fresh clone can build and run the minimal program with documented commands.
+Done when a fresh clone builds and runs with documented commands. Learning: modules, Git, tests.
 
 ## M1 — Static world
 
-- [ ] Decide how to represent terrain, coordinates and a rectangular grid.
-- [ ] Create a small hand-authored map containing water, plains, forest and mountains.
-- [ ] Render the map to the terminal using ASCII glyphs.
-- [ ] Separate rendering from the world model.
-- [ ] Test map dimensions, tile access and out-of-bounds behavior.
+- [ ] Define coordinates, terrain, tile and rectangular grid; validate dimensions and bounds.
+- [ ] Build a small hand-authored map with five terrain types.
+- [ ] Render ASCII independently of world logic; test dimensions, access and terrain glyphs.
 
-Example output (illustrative):
+Done when a static map renders reliably and tests run without terminal I/O. Learning: types, slices, methods. No life or procedural generation yet.
 
-```text
-~~~~~~~~~~
-~~..^^..~~
-~..TT^...~
-~.TT.....~
-~~......~~
-~~~~~~~~~~
-```
+## M2 — Seeded geography
 
-Done when the map renders consistently, each terrain type has a distinct representation, and map logic can be tested without terminal input/output. No procedural generation or external UI library required.
+- [ ] Accept dimensions and seed; generate valid terrain with a local random source.
+- [ ] Improve geographic coherence using a simple spatial technique; defer detailed climate and rivers.
+- [ ] Display seed; test identical inputs produce identical maps.
 
-## M2 — Seeded terrain
+Done when reproducible maps contain coherent regions. Learning: randomness, spatial algorithms.
 
-- [ ] Accept dimensions and a seed; reject invalid dimensions.
-- [ ] Generate simple randomized terrain using a local random source.
-- [ ] Display the seed with the map.
-- [ ] Test identical configuration and seed produce identical maps.
+## M3 — Clock, vegetation and events
 
-Done when worlds can be reproduced and valid dimensions and terrain are guaranteed. Natural-looking geography is not required yet.
+- [ ] Introduce explicit daily step and structured event records.
+- [ ] Model terrain-dependent vegetation capacity and regeneration.
+- [ ] Advance N days without rendering; inspect biomass and test bounds.
 
-## M3 — Coherent geography
+Done when a depleted patch recovers according to rules and time advances exactly N ticks. Learning: state transitions, bounded growth.
 
-- [ ] Generate an elevation field using a coherent noise technique.
-- [ ] Classify land, water and mountains.
-- [ ] Introduce moisture and temperature, then derive biomes.
-- [ ] Explore rivers and drainage as a follow-up task.
+## M4 — Prey ecology
 
-Done when maps contain coherent geographic regions and generation remains reproducible. Rivers may be deferred until their model is understood.
+- [ ] Add aggregate prey populations, feeding, reproduction and starvation.
+- [ ] Define consumption and growth order; handle zero populations and depleted vegetation.
+- [ ] Test vegetation/prey interactions and seeded replay.
 
-## M4 — Settlements
+Done when prey respond to renewable food availability without negative counts or duplicated resources. Learning: feedback loops, invariants.
 
-- [ ] Model settlements with stable IDs, names, positions and population.
-- [ ] Score candidate tiles using geography and resource suitability.
-- [ ] Enforce land placement and minimum spacing; handle insufficient candidates.
+## M5 — Tribes and basic survival
 
-Done when generated settlements obey placement constraints and can be inspected.
+- [ ] Add stable IDs, home placement, aggregate population, food stockpile and hunger.
+- [ ] Implement simple local resource acquisition from actual available prey or vegetation, consumption and population change.
+- [ ] Test shortage, recovery, extinction and competing resource claims.
 
-## M5 — Simulation clock
+Done when multiple tribes can survive or decline over a bounded run. Local acquisition is temporary scaffolding, not an extra source retained alongside later expeditions. Learning: data modeling, resource accounting.
 
-- [ ] Represent elapsed days and implement an explicit step operation.
-- [ ] Advance a requested number of days without requiring rendering.
-- [ ] Establish a structured event record.
+## M6 — Hunting expeditions and fixed influence (Survival MVP)
 
-Done when advancing N days advances exactly N ticks and repeat runs with the same inputs behave consistently.
+- [ ] Implement fixed reachable range using uniform movement costs and BFS.
+- [ ] Assign hunting groups; track travel, harvesting, return, casualties and cargo.
+- [ ] Replace direct local acquisition with explicit expedition acquisition where applicable.
+- [ ] Render homes, influence and overlap; inspect food, population and events.
+- [ ] Test member allocation, shared prey depletion, return accounting and deterministic replay.
 
-## M6 — Resource economy and chronicle
+Done when a seeded multi-tribe world runs for a configurable period (initial test target: 30 days) and visibly demonstrates resource competition, survival and decline. No political or predator-pack simulation required. Learning: graph traversal, state machines.
 
-- [ ] Track food production, consumption, storage and unmet demand.
-- [ ] Record shortage onset and recovery.
-- [ ] Test surplus, balance and deficit cases, including exhausted reserves.
-- [ ] Display settlement status and chronological events.
+## M7 — Dynamic influence and destination choice
 
-Done when a seeded world can run for at least 30 days and explain resource changes through inspectable state and events. This is the first meaningful simulation prototype.
+- [ ] Track recent hunting yields, reserves and travel costs; calculate desired range.
+- [ ] Adjust range gradually; select feasible destinations by weighted utility.
+- [ ] Add terrain costs and Dijkstra reachability; test barriers and budget bounds.
 
-## Later milestones (provisional)
+Done when scarcity expands activity, abundance can contract it, and geography shapes reachable regions. Learning: priority queues, scoring.
 
-| Milestone | Completion target |
-|---|---|
-| M7 | Connected settlements exchange resources via valid routes. |
-| M8 | Population changes and faction decisions respond to simulated conditions. |
-| M9 | Named agents pursue goals and generate consequential events. |
-| M10 | Users inspect maps and history, and save/load a world with its continuation state. |
-| M11 | Benchmarks identify bottlenecks; safe optimizations and a documented release follow. |
+## M8 — Leadership and population response
 
-Refine later milestones into issues only when prerequisites are understood.
+- [ ] Add leader traits as decision biases, not rigid commands.
+- [ ] Derive population pressures and implement pure dissatisfaction evaluation.
+- [ ] Apply bounded compliance effects to actual group activity; test that intentions and outcomes differ.
+
+Done when identical circumstances can yield different decisions under different leaders and evaluation never mutates state. Learning: pure functions, table-driven tests.
+
+## M9 — Encounters and relationships
+
+- [ ] Resolve co-located expeditions using explicit presence rules.
+- [ ] Model avoidance, tolerance, incidental conflict and casualties.
+- [ ] Track pairwise relationships; introduce basic cooperation, alliances and intentional conflict.
+
+Done when overlapping ranges can coexist peacefully or generate conflict through actual interactions. Learning: interaction resolution, deterministic ordering.
+
+## M10 — Confidence, instability and elections
+
+- [ ] Add persistent confidence, gradual loss/recovery and separate instability evaluation.
+- [ ] Resolve political action without automatic overthrow at zero confidence.
+- [ ] Generate three candidates; use the same pure evaluation; elect lowest dissatisfaction.
+- [ ] Restore moderate confidence only; preserve material state and record succession.
+
+Done when a leader can recover from hardship or be replaced, and inherited crises do not force immediate succession by definition. Test repeated crises and candidate ties. Learning: state transitions, deterministic randomness.
+
+## M11 — Cohesion, migration and fragmentation
+
+- [ ] Separate group cohesion from leadership confidence.
+- [ ] Add relocation and viable split outcomes; handle home contention or migration.
+- [ ] Partition people, resources and outstanding expeditions without duplication; record ancestry.
+
+Done when new independent tribes can emerge from existing ones and conservation tests pass. Joining/merging is optional follow-up. Learning: entity lifecycle, invariants.
+
+## M12 — Autonomous predator packs
+
+- [ ] Add packs with prey needs, den, movement, influence and hunting behavior.
+- [ ] Reuse proven geographic/resource mechanisms through composition; avoid human political rules for animals.
+- [ ] Resolve competition and encounters with tribes and other packs; add species-appropriate dispersal and fragmentation.
+- [ ] Test prey accounting, pack survival and ecological feedback into tribal conditions.
+
+Done when packs can independently change hunting ranges and affect tribal survival, and pack splits conserve members. Mobile prey herds are a later extension. Learning: refactoring, composition, integration tests.
+
+## M13 — Observer and persistence
+
+- [ ] Improve terminal inspection, overlays and event filtering; expose decision scores and political history.
+- [ ] Add save/load with sufficient continuation state, including RNG strategy.
+- [ ] Test replay equivalence across save/load.
+
+Done when a user can inspect why major events occurred and resume a world. Learning: serialization, UI boundaries.
+
+## M14 — Experiments and scale
+
+- [ ] Run controlled scenarios across multiple seeds; report survival, population, resource and political metrics.
+- [ ] Compare strategies with equivalent starting conditions and document limitations.
+- [ ] Benchmark; parallelize independent runs only if beneficial, with isolated RNG/state.
+
+Done when repeatable experiments produce comparable summaries and performance changes are measured. Learning: benchmarking, concurrency, statistics.
+
+## Working agreement
+
+The project author writes the implementation. AI assistance defaults to requirements, algorithm explanations, pseudocode, test suggestions, debugging and code review; complete implementations only when requested. Open focused issues as prerequisites become understood. Avoid implementing future abstractions before concrete use cases exist.
+
+## Next issue 
+
+**M0: Establish revised project foundation.** Review these documents, commit them on a documentation branch, and verify the module/executable status before starting M1. Suggested branch: `docs/revise-simulation-scope`; suggested commit: `docs: redefine World Weaver as an emergent ecosystem simulator`. Do not mark milestones complete based on this document alone.
