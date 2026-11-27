@@ -8,7 +8,7 @@ func TestTileTerrain(t *testing.T) {
 	terrain := tile.Terrain()
 
 	if terrain != Grassland {
-		t.Errorf("expected %q, got %q", terrain, Grassland)
+		t.Errorf("expected %q, got %q", Grassland, terrain)
 	}
 }
 
